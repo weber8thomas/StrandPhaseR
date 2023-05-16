@@ -5,7 +5,7 @@
 #' 1. extract variable position in WC regions
 #' 2. Fill two matrices separately for SNVs found in Watson and Crick reads
 #' 3. Sort matrices in order each column in each matrix has lowest amount of conflicting bases
-#' 4. Exclude rows/cells which cannot be reliably assigned to only one matrix consensus 
+#' 4. Exclude rows/cells which cannot be reliably assigned to only one matrix consensus
 #' 5. For successfully phased rows/cell export W and C reads as a separate haplotype specifiv GRanges object
 #'
 #' @param inputfolder Path to the bam files to process
@@ -58,10 +58,10 @@ phaseChromosome <- function(inputfolder, outputfolder='./StrandPhaseR_analysis',
     if (!is.null(fillMissAllele)) {
       header <- utils::read.table(fillMissAllele, stringsAsFactors = FALSE, fill = TRUE, comment.char = "&", nrows = 1)
       if (grepl(header, pattern = "VCF", ignore.case = TRUE)) {
-        assem.haps <- fillGapsWithVCF(data.object=assem.haps, ref.vcf=fillMissAllele, chromosome=chromosome)
+        assem.haps <- fillGapsWithVCF(data.object = assem.haps, ref.vcf = fillMissAllele, chromosome = chromosome)
       }
       if (grepl(fillMissAllele, pattern = "\\.bam$")) {
-        assem.haps <- fillGapsWithBam(data.object=assem.haps, merged.bam=fillMissAllele, min.mapq=min.mapq, min.baseq=min.baseq, translateBases=translateBases, chromosome=chromosome)  
+        assem.haps <- fillGapsWithBam(data.object = assem.haps, merged.bam = fillMissAllele, min.mapq = min.mapq, min.baseq = min.baseq, translateBases = translateBases, chromosome = chromosome)
       }
     }
       
@@ -80,7 +80,7 @@ phaseChromosome <- function(inputfolder, outputfolder='./StrandPhaseR_analysis',
         ## Detect LOH regions
         LOH.regions <- LOHseeker(data.object=cell.comparisons.l, chromosome=chromosome, bin.size=5)
         LOH.regions.df <- data.frame(LOH.regions)
-        destination <- file.path(singlecell.store, paste0(chromosome, '_singleCell_LOH.txt'))
+        destination <- file.path(singlecell.store, paste0(chromosome, "_singleCell_LOH.txt"))
         write.table(LOH.regions.df, file = destination, quote = F, row.names = F)
       }  
     }  
@@ -122,14 +122,18 @@ phaseChromosome <- function(inputfolder, outputfolder='./StrandPhaseR_analysis',
     
     ## Split reads per haplotype  
     if (splitPhasedReads) {
-      haps.gr <- splitReads(data.object=assem.haps, inputfolder=inputfolder, pairedEndReads=pairedEndReads, min.mapq=10, filterAltAlign=TRUE)
-      destination <- file.path(data.store, paste0(chromosome, '_reads.RData'))
-      save(haps.gr, file=destination)
-      
-      exportBedGraph(index=paste0(chromosome, '_hap1'), outputfolder=browser.store, fragments=haps.gr$hap1, col="0,128,255")
-      exportBedGraph(index=paste0(chromosome, '_hap2'), outputfolder=browser.store, fragments=haps.gr$hap2, col="0,255,255")
+      haps.gr <- splitReads(data.object = assem.haps, inputfolder = inputfolder, pairedEndReads = pairedEndReads, min.mapq = 10, filterAltAlign = TRUE)
+
+      if (is.null(haps.gr)) {
+        message("Skipping further processing as splitReads returned NULL.")
+      } else {
+        destination <- file.path(data.store, paste0(chromosome, "_reads.RData"))
+        save(haps.gr, file = destination)
+
+        exportBedGraph(index = paste0(chromosome, "_hap1"), outputfolder = browser.store, fragments = haps.gr$hap1, col = "0,128,255")
+        exportBedGraph(index = paste0(chromosome, "_hap2"), outputfolder = browser.store, fragments = haps.gr$hap2, col = "0,255,255")
+      }
     }
-  
   } else {
     message(" Insufficient data to assemble haplotypes, skipping ...")
     if (!is.null(exportVCF)) {
@@ -137,4 +141,4 @@ phaseChromosome <- function(inputfolder, outputfolder='./StrandPhaseR_analysis',
       exportVCF(index = exportVCF, outputfolder = vcf.store, positions=positions, bsGenome = bsGenome, chromosome = chromosome)
     }	
   }
-} #end of function
+} # end of function
