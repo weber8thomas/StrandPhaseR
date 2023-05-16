@@ -46,6 +46,12 @@ compareSingleCellHaps <- function(consensusHaps=NULL, sortedHaps=NULL, bin.size=
   names(hap1.cons.code) <- hap1.cons$pos
   names(hap2.cons.code) <- hap2.cons$pos
   
+  print(bin.size)
+  print(hap1.cons)
+  print(nrow(hap1.cons))
+  print(hap2.cons)
+  print(nrow(hap2.cons))
+  
   #check if there is enough SNV variants to scan single cell haplotypes (at least 10 times more)
   if (nrow(hap1.cons)>10*bin.size & nrow(hap1.cons)>10*bin.size) {
   
