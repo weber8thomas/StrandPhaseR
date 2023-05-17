@@ -92,22 +92,22 @@ phaseChromosome <- function(inputfolder, outputfolder='./StrandPhaseR_analysis',
     assem.haps$hap2.cons <- cbind(chrName.hap2, assem.haps$hap2.cons)	 	
   
     ## Export phased haplotypes
-    destination <- file.path(data.store, paste0(chromosome, '_phased.RData')) #save original data object with sorted matrices
-    save(srt.matrices, file=destination)
+    # destination <- file.path(data.store, paste0(chromosome, '_phased.RData')) #save original data object with sorted matrices
+    # save(srt.matrices, file=destination)
     
-    destination <- file.path(phased.store, paste0(chromosome, '_phased_hap1.txt')) #save phased alleles per haplotype in separate files
-    utils::write.table(assem.haps$hap1.cons, file=destination, row.names = F)
-    destination <- file.path(phased.store, paste0(chromosome, '_phased_hap2.txt'))
-    utils::write.table(assem.haps$hap2.cons, file=destination, row.names = F)
+    # destination <- file.path(phased.store, paste0(chromosome, '_phased_hap1.txt')) #save phased alleles per haplotype in separate files
+    # utils::write.table(assem.haps$hap1.cons, file=destination, row.names = F)
+    # destination <- file.path(phased.store, paste0(chromosome, '_phased_hap2.txt'))
+    # utils::write.table(assem.haps$hap2.cons, file=destination, row.names = F)
     
-    destination <- file.path(phased.store, paste0(chromosome, '_phasedFiles_hap1.txt'))
-    hap1.files <- data.frame(names(assem.haps$hap1.files), do.call(rbind, lapply(assem.haps$hap1.files, rbind)))
-    names(hap1.files) <- c("Filenames", "Simil", "Disimil")
-    utils::write.table(hap1.files, file=destination, row.names = F)
-    destination <- file.path(phased.store, paste0(chromosome, '_phasedFiles_hap2.txt'))
-    hap2.files <- data.frame(names(assem.haps$hap2.files), do.call(rbind, lapply(assem.haps$hap2.files, rbind)))
-    names(hap2.files) <- c("Filenames", "Simil", "Disimil")
-    utils::write.table(hap2.files, file=destination, row.names = F)
+    # destination <- file.path(phased.store, paste0(chromosome, '_phasedFiles_hap1.txt'))
+    # hap1.files <- data.frame(names(assem.haps$hap1.files), do.call(rbind, lapply(assem.haps$hap1.files, rbind)))
+    # names(hap1.files) <- c("Filenames", "Simil", "Disimil")
+    # utils::write.table(hap1.files, file=destination, row.names = F)
+    # destination <- file.path(phased.store, paste0(chromosome, '_phasedFiles_hap2.txt'))
+    # hap2.files <- data.frame(names(assem.haps$hap2.files), do.call(rbind, lapply(assem.haps$hap2.files, rbind)))
+    # names(hap2.files) <- c("Filenames", "Simil", "Disimil")
+    # utils::write.table(hap2.files, file=destination, row.names = F)
     destination <- file.path(phased.store, 'phased_haps.txt')
     utils::write.table(data.frame(assem.haps$assem.haps), file=destination, row.names = F, col.names=F, quote = F, append = T, sep="\t")	  
 

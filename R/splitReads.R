@@ -14,6 +14,11 @@ splitReads <- function(data.object=NULL, inputfolder=inputfolder, pairedEndReads
   
   hap1.files <- data.object[['hap1.files']]
   hap2.files <- data.object[['hap2.files']]
+
+  if (length(hap1.files) == 0 || length(hap2.files) == 0) {
+    message("hap1.files or hap2.files is empty. Skipping splitReads analysis.")
+    return(NULL)
+  }
   
   hap1 <- names(hap1.files)
   hap2 <- names(hap2.files)
